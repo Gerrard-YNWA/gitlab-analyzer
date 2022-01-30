@@ -18,7 +18,7 @@ to: 2022-01-30
 * **token** access_token with read_repository permission.
 * **projects** project list wait for analyze, if not specified this tool will analyze all the projects of the access_token.
 * **author** filter and only analyze specified author's commits, if not specified this tool will analyze all the authors.
-**from** and **to**  time range, default scan all the history
+* **from** and **to**  time range, default scan all the history.
 
 sample:
 ```
