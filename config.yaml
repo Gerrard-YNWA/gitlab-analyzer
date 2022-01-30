@@ -1,0 +1,8 @@
+host: example.gitlab.com
+token: $access_token
+projects:
+  - project1 
+  - project2 
+author: Gerrard-YNWA 
+from: 2022-01-01
+to:
