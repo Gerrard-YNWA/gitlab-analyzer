@@ -168,24 +168,16 @@ func (r *Repo) WithDuration(from, to string) *Repo {
 }
 
 func (r *Repo) FetchCommits() error {
-	page := 0
+	page := 1
 	perpage := 20
 	pat := "https://%s%s/projects/%d/repository/commits?page=%d&per_page=%d&private_token=%s"
-	resp, err := r.gitlab.req(pat, r.Id, page, perpage)
-	if err != nil {
-		return err
-	}
 
-	pages, err := strconv.Atoi(resp.Header.Get("X-Total-Pages"))
-	if err != nil {
-		return err
-	}
-
-	for page = 1; page <= pages; page++ {
+	for {
 		resp, err := r.gitlab.req(pat, r.Id, page, perpage)
 		if err != nil {
 			return err
 		}
+
 		if data, err := io.ReadAll(resp.Body); err != nil {
 			return err
 		} else {
@@ -214,6 +206,16 @@ func (r *Repo) FetchCommits() error {
 					collectCommits(r, cmt)
 				}
 			}
+		}
+
+		next := resp.Header.Get("X-Next-Page")
+		if next == "" {
+			break
+		}
+
+		page, err = strconv.Atoi(next)
+		if err != nil {
+			return err
 		}
 	}
 
